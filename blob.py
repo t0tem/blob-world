@@ -12,6 +12,18 @@ class Blob:
         self.y = random.randrange(0, y_boundary)
         self.movement_range = movement_range
 
+    def __repr__(self):
+        return 'Blob({}, {}, ({}, {}))'.format(self.color,
+                                                self.size,
+                                                self.x,
+                                                self.y)
+
+    def __str__(self):
+        return 'Blob of color: {}, size: {}, location: ({}, {}))'.format(self.color,
+                                                                         self.size,
+                                                                         self.x,
+                                                                         self.y)
+
     def move(self):
         self.move_x = random.randrange(self.movement_range[0], self.movement_range[1])
         self.move_y = random.randrange(self.movement_range[0], self.movement_range[1])

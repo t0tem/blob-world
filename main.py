@@ -36,7 +36,7 @@ class BlueBlob(Blob):
         super().__init__((0, 0, 255), x_boundary, y_boundary)
 
     def __add__(self, other_blob):
-        logging.info('Blob add op {} + {}'.format(str(self.color), str(other_blob.color)))
+        logging.info('Blob add op {} + {}'.format(repr(self), repr(other_blob)))
         if other_blob.color == (255, 0, 0):
             initial_size = self.size
             self.size -= other_blob.size  # red 'burns' blue on collision
@@ -69,7 +69,7 @@ def handle_collisions(blob_list):
     for blue_id, blue_blob in blues.copy().items():
         for other_blobs in blues, reds, greens:
             for other_blob_id, other_blob in other_blobs.copy().items():
-                logging.debug('Checking if blobs are touching {} + {}'.format(str(blue_blob.color), str(other_blob.color)))
+                logging.debug('Checking if blobs are touching {} + {}'.format(repr(blue_blob), repr(other_blob)))
                 if blue_blob == other_blob:
                     pass
                 else:
