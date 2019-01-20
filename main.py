@@ -104,14 +104,19 @@ def main():
     green_blobs = dict(enumerate([GreenBlob(WIDTH, HEIGHT) for _ in range(STARTING_GREEN_BLOBS)]))
 
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+        try:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
 
-        blue_blobs, red_blobs, green_blobs = draw_environment([blue_blobs, red_blobs, green_blobs])
-        clock.tick(60)
-
+            blue_blobs, red_blobs, green_blobs = draw_environment([blue_blobs, red_blobs, green_blobs])
+            clock.tick(60)
+        except Exception as e:
+            logging.critical(str(e))
+            pygame.quit()
+            quit()
+            break
 
 if __name__ == '__main__':
     main()
