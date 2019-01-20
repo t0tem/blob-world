@@ -16,7 +16,7 @@ logging.basicConfig(filename='logfile.log', level=logging.INFO)
 
 STARTING_BLUE_BLOBS = 15
 STARTING_RED_BLOBS = 15
-STARTING_GREEN_BLOBS = 15
+STARTING_GREEN_BLOBS = 25
 
 
 WIDTH = 800
@@ -38,11 +38,12 @@ class BlueBlob(Blob):
     def __add__(self, other_blob):
         logging.info('Blob add op {} + {}'.format(str(self.color), str(other_blob.color)))
         if other_blob.color == (255, 0, 0):
+            initial_size = self.size
             self.size -= other_blob.size  # red 'burns' blue on collision
-            other_blob.size -= self.size  # blue 'burns back' red with what's left
+            other_blob.size -= initial_size  # blue 'burns back' red
         elif other_blob.color == (0, 255, 0):
             self.size += other_blob.size  # blue 'eats' green
-            other_blob.color = 0
+            other_blob.size = 0
         elif other_blob.color == (0, 0, 255):
             pass
         else:
@@ -83,6 +84,7 @@ def handle_collisions(blob_list):
 
 
 def draw_environment(blob_list):
+    blues, reds, greens = handle_collisions(blob_list)
     game_display.fill(WHITE)
 
     for blob_dict in blob_list:
@@ -93,19 +95,21 @@ def draw_environment(blob_list):
             blob.check_bounds()
 
     pygame.display.update()
+    return blues, reds, greens
 
 
 def main():
     blue_blobs = dict(enumerate([BlueBlob(WIDTH, HEIGHT) for _ in range(STARTING_BLUE_BLOBS)]))
     red_blobs = dict(enumerate([RedBlob(WIDTH, HEIGHT) for _ in range(STARTING_RED_BLOBS)]))
     green_blobs = dict(enumerate([GreenBlob(WIDTH, HEIGHT) for _ in range(STARTING_GREEN_BLOBS)]))
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
-        draw_environment([blue_blobs, red_blobs, green_blobs])
+        blue_blobs, red_blobs, green_blobs = draw_environment([blue_blobs, red_blobs, green_blobs])
         clock.tick(60)
 
 
