@@ -59,6 +59,29 @@ class GreenBlob(Blob):
         super().__init__((0, 255, 0), x_boundary, y_boundary)
 
 
+def is_touching(b1, b2):
+    return np.linalg.norm(np.array([b1.x, b1.y]) - np.array([b2.x, b2.y])) < (b1.size + b2.size)
+
+
+def handle_collisions(blob_list):
+    blues, reds, greens = blob_list
+    for blue_id, blue_blob in blues.copy().items():
+        for other_blobs in blues, reds, greens:
+            for other_blob_id, other_blob in other_blobs.copy().items():
+                logging.debug('Checking if blobs are touching {} + {}'.format(str(blue_blob.color), str(other_blob.color)))
+                if blue_blob == other_blob:
+                    pass
+                else:
+                    if is_touching(blue_blob, other_blob):
+                        blue_blob + other_blob
+                        if other_blob.size <= 0:
+                            del other_blobs[other_blob_id]
+                        if blue_blob.size <= 0:
+                            del blues[blue_id]
+
+    return blues, reds, greens
+
+
 def draw_environment(blob_list):
     game_display.fill(WHITE)
 
