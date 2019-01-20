@@ -35,6 +35,19 @@ class BlueBlob(Blob):
     def __init__(self, x_boundary, y_boundary):
         super().__init__((0, 0, 255), x_boundary, y_boundary)
 
+    def __add__(self, other_blob):
+        logging.info('Blob add op {} + {}'.format(str(self.color), str(other_blob.color)))
+        if other_blob.color == (255, 0, 0):
+            self.size -= other_blob.size  # red 'burns' blue on collision
+            other_blob.size -= self.size  # blue 'burns back' red with what's left
+        elif other_blob.color == (0, 255, 0):
+            self.size += other_blob.size  # blue 'eats' green
+            other_blob.color = 0
+        elif other_blob.color == (0, 0, 255):
+            pass
+        else:
+            raise Exception('Tried to combine one or multiple blobs of unsupported colors.')
+
 
 class RedBlob(Blob):
     def __init__(self, x_boundary, y_boundary):
