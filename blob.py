@@ -14,9 +14,9 @@ class Blob:
 
     def __repr__(self):
         return 'Blob({}, {}, ({}, {}))'.format(self.color,
-                                                self.size,
-                                                self.x,
-                                                self.y)
+                                               self.size,
+                                               self.x,
+                                               self.y)
 
     def __str__(self):
         return 'Blob of color: {}, size: {}, location: ({}, {}))'.format(self.color,
